@@ -74,9 +74,9 @@ module ActsAsTaggableOn::Taggable
         tagging_contexts.each do |context|
           cached_owned_tag_list_on(context).each do |owner, tag_list|
             # Find existing tags or create non-existing tags:
-            tag_list = ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_list.uniq)            
+            tag_list = ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_list.uniq)
 
-            owned_tags = owner_tags_on(owner, context)              
+            owned_tags = owner_tags_on(owner, context)
             old_tags   = owned_tags - tag_list
             new_tags   = tag_list   - owned_tags
           
@@ -93,7 +93,7 @@ module ActsAsTaggableOn::Taggable
 
             # Create new taggings:
             new_tags.each do |tag|
-              ActsAsTaggableOn::Tagging.create!(:tag_id => tag.id, :context => context.to_s, :tagger => owner, :taggable => self)
+              ActsAsTaggableOn::Tagging.create!(:tag => tag, :context => context.to_s, :tagger => owner, :taggable => self)
             end
           end
         end
