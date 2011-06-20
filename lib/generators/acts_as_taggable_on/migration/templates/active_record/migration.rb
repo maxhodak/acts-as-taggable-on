@@ -2,6 +2,9 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
   def self.up
     create_table :tags do |t|
       t.string :name
+      t.string :color
+      t.string :visibility
+      t.references :tagger, :polymorphic => true
     end
 
     create_table :taggings do |t|
@@ -16,6 +19,9 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
 
       t.datetime :created_at
     end
+
+    add_index :tags, :tagger_id
+    add_index :tags, [:tagger_id, :visibility]
 
     add_index :taggings, :tag_id
     add_index :taggings, [:taggable_id, :taggable_type, :context]

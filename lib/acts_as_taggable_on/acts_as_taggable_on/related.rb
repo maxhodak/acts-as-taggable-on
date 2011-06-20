@@ -56,7 +56,7 @@ module ActsAsTaggableOn::Taggable
 
         exclude_self = "#{klass.table_name}.id != #{id} AND" if self.class == klass
 
-group_columns = ActsAsTaggableOn::Tag.using_postgresql? ? grouped_column_names_for(klass) : "#{klass.table_name}.#{klass.primary_key}"
+        group_columns = ActsAsTaggableOn::Tag.using_postgresql? ? grouped_column_names_for(klass) : "#{klass.table_name}.#{klass.primary_key}"
 
         klass.scoped({ :select     => "#{klass.table_name}.*, COUNT(#{ActsAsTaggableOn::Tag.table_name}.id) AS count",
                        :from       => "#{klass.table_name}, #{ActsAsTaggableOn::Tag.table_name}, #{ActsAsTaggableOn::Tagging.table_name}",

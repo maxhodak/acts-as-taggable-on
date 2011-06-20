@@ -39,7 +39,7 @@ describe "acts_as_tagger" do
     context 'when called with a non-existent tag context' do
       before(:each) do
         @tagger = TaggableUser.new()
-        @taggable = TaggableModel.new(:name=>"Richard Prior")
+        @taggable = TaggableModel.new(:name => "Richard Prior")
       end
       
       it "should by default not throw an exception " do
@@ -87,6 +87,7 @@ describe "acts_as_tagger" do
     describe "when called by multiple tagger's" do
       before(:each) do
         @user_x = TaggableUser.create(:name => "User X")
+        
         @user_y = TaggableUser.create(:name => "User Y")
         @taggable = TaggableModel.create(:name => 'acts_as_taggable_on', :tag_list => 'plugin')
         

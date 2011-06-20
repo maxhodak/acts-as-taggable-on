@@ -2,18 +2,12 @@ module ActsAsTaggableOn
   class Tag < ::ActiveRecord::Base
     include ActsAsTaggableOn::ActiveRecord::Backports if ::ActiveRecord::VERSION::MAJOR < 3
   
-    attr_accessible :name
-
-    ### ASSOCIATIONS:
+    attr_accessible :name, :color, :visibility, :tagger, :tagger_id
 
     has_many :taggings, :dependent => :destroy, :class_name => 'ActsAsTaggableOn::Tagging'
 
-    ### VALIDATIONS:
-
     validates_presence_of :name
     validates_uniqueness_of :name
-
-    ### SCOPES:
     
     def self.using_postgresql?
       connection.adapter_name == 'PostgreSQL'
@@ -35,8 +29,6 @@ module ActsAsTaggableOn
       where(list.map { |tag| sanitize_sql(["name #{like_operator} ?", "%#{tag.to_s}%"]) }.join(" OR "))
     end
 
-    ### CLASS METHODS:
-
     def self.find_or_create_with_like_by_name(name)
       named_like(name).first || create(:name => name)
     end
@@ -51,12 +43,12 @@ module ActsAsTaggableOn
                         name = comparable_name(name)
                         existing_tags.any? { |tag| comparable_name(tag.name) == name }
                       end
-      created_tags  = new_tag_names.map { |name| Tag.create(:name => name) }
+      created_tags  = new_tag_names.map { |name|
+        Tag.create!(:name => name)
+      }
 
       existing_tags + created_tags
     end
-
-    ### INSTANCE METHODS:
 
     def ==(object)
       super || (object.is_a?(Tag) && name == object.name)
